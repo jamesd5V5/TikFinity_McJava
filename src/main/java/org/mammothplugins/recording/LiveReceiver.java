@@ -17,22 +17,20 @@ public class LiveReceiver implements Receiver {
     private String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 
     private int num;
-    private RecordingMidi recordingMidi;
 
-    public LiveReceiver(int num, RecordingMidi recordingMidi) {
+    public LiveReceiver(int num) {
         this.num = num;
-        this.recordingMidi = recordingMidi;
     }
 
     @Override
     public void send(MidiMessage message, long timeStamp) {
         try {
             if (!RecordingMidi.isRecording()) {
-                Common.log("Should Not be recording: " + num);
                 this.close();
                 return;
-            } else
-                Common.log("In Send: " + num);
+            }
+//            } else
+//                Common.log("In Send: " + num);
             if (message instanceof ShortMessage sm) {
                 int key = sm.getData1();
                 int velocity = sm.getData2();
@@ -52,21 +50,22 @@ public class LiveReceiver implements Receiver {
                 }
             }
         } catch (Exception e) {
+            Common.log("Exception " + e.getMessage());
         }
     }
 
     @Override
     public void close() {
         try {
-            if (recordingMidi.getSequencer() != null) {
-                if (recordingMidi.getSequencer().isRecording())
-                    recordingMidi.getSequencer().stopRecording();
-                if (recordingMidi.getSequencer().isRunning())
-                    recordingMidi.getSequencer().close();
+            if (RecordingMidi.getSequencer() != null) {
+                if (RecordingMidi.getSequencer().isRecording())
+                    RecordingMidi.getSequencer().stopRecording();
+                if (RecordingMidi.getSequencer().isRunning())
+                    RecordingMidi.getSequencer().close();
             }
-            if (recordingMidi.getMidiDevice() != null) {
-                if (recordingMidi.getMidiDevice().isOpen())
-                    recordingMidi.getMidiDevice().close();
+            if (RecordingMidi.getMidiDevice() != null) {
+                if (RecordingMidi.getMidiDevice().isOpen())
+                    RecordingMidi.getMidiDevice().close();
             }
         } catch (Exception e) {
         }

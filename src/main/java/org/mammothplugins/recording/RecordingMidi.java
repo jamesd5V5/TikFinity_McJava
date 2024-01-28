@@ -14,32 +14,40 @@ public class RecordingMidi {
     private static boolean isRecording;
 
     @Getter
-    private MidiDevice midiDevice;
+    private static MidiDevice midiDevice;
     @Getter
-    private Sequencer sequencer;
+    private static Sequencer sequencer;
 
-    private BukkitTask recordingTask;
+    private static BukkitTask recordingTask;
+    private static LiveReceiver receiver;
 
     private static int num = 0;
+    private static MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
 
-    public void record() throws MidiUnavailableException, InvalidMidiDataException {
+
+    private static Sequence seq;
+    private static Track currentTrack;
+    private static Transmitter transmitter;
+
+    public static void record() throws MidiUnavailableException, InvalidMidiDataException {
         try {
-            MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
-            this.midiDevice = MidiSystem.getMidiDevice(infos[5]);
+            midiDevice = MidiSystem.getMidiDevice(infos[5]);
 
-            this.sequencer = MidiSystem.getSequencer();
-            LiveReceiver receiver = new LiveReceiver(num++, this);
-            Transmitter transmitter = midiDevice.getTransmitter();
+            sequencer = MidiSystem.getSequencer();
+            receiver = new LiveReceiver(num++);
+            transmitter = midiDevice.getTransmitter();
 
             midiDevice.open();
             sequencer.open();
 
             transmitter.setReceiver(receiver);
+            seq = new Sequence(Sequence.PPQ, 24);
 
-            Sequence seq = new Sequence(Sequence.PPQ, 24);
-            Track currentTrack = seq.createTrack();
+            currentTrack = seq.createTrack();
+
+            seq.deleteTrack(currentTrack);
             sequencer.setSequence(seq);
-            sequencer.setTickPosition(0);
+            //sequencer.setTickPosition(0);
 
             // Start the sequencer and wait for MIDI events to arrive
             sequencer.recordEnable(currentTrack, -1);
@@ -49,40 +57,66 @@ public class RecordingMidi {
         }
     }
 
-    public void listen() {
-        RecordingMidi rm = this;
+    public static void listen() {
         if (isRecording)
             recordingTask = new BukkitRunnable() {
                 @Override
                 public void run() {
                     try {
-                        rm.record();
+                        if (isRecording == false) {
+                            cancel();
+                            return;
+                        }
+                        record();
                     } catch (Exception e) {
                     }
                 }
             }.runTaskTimer(Mc_Piano.getInstance(), 0L, 2L);
     }
 
-    public void isRecording(boolean isRecording) {
+    public static void isRecording(boolean r) {
         try {
-            this.isRecording = isRecording;
+            isRecording = r;
 
             if (isRecording == false) {
+                if (receiver != null)
+                    receiver.close();
                 if (recordingTask != null)
                     recordingTask.cancel();
                 if (sequencer != null) {
-                    if (sequencer.isRecording())
+                    if (sequencer.isRecording()) {
                         sequencer.stopRecording();
+                        sequencer.stop();
+                        sequencer.close();
+                    }
                     if (sequencer.isRunning())
                         sequencer.close();
                 }
-                if (midiDevice != null) {
+                if (midiDevice != null)
                     if (midiDevice.isOpen())
                         midiDevice.close();
-                }
+                if (seq != null)
+                    seq.deleteTrack(currentTrack);
+                if (transmitter != null)
+                    transmitter.close();
+
+                sequencer = null;
+                midiDevice = null;
+                recordingTask = null;
+                receiver = null;
+                seq = null;
+                currentTrack = null;
+                transmitter = null;
             }
         } catch (Exception e) {
         }
 
+    }
+
+    public static void check() {
+        Common.broadcast("Sequencer: " + (sequencer == null));
+        Common.broadcast("Midi: " + (midiDevice == null));
+        Common.broadcast("Task: " + (recordingTask == null));
+        Common.broadcast("Reciever: " + (receiver == null));
     }
 }

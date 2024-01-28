@@ -2,8 +2,6 @@ package org.mammothplugins.command;
 
 import org.bukkit.Instrument;
 import org.bukkit.Note;
-import org.mammothplugins.mc_piano.Mc_Piano;
-import org.mammothplugins.recording.MidiPiano;
 import org.mammothplugins.recording.RecordingMidi;
 import org.mineacademy.fo.Common;
 import org.mineacademy.fo.command.SimpleCommand;
@@ -19,18 +17,21 @@ public class PianoCommands extends SimpleCommand {
     protected void onCommand() {
         this.checkConsole();
         boolean foundCommand = false;
-        RecordingMidi rm = new RecordingMidi();
         if (this.args.length == 1) {
             if ("on".equalsIgnoreCase(this.args[0])) {
                 Common.tell(getSender(), "Piano is on.");
-                rm.isRecording(true);
-                rm.listen(); //Starts Loops
+                RecordingMidi.isRecording(true);
+                RecordingMidi.listen(); //Starts Loops
 
                 foundCommand = true;
             }
             if ("off".equalsIgnoreCase(this.args[0])) {
                 Common.tell(getSender(), "Piano is off.");
-                rm.isRecording(false);
+                RecordingMidi.isRecording(false);
+                foundCommand = true;
+            }
+            if ("check".equalsIgnoreCase(this.args[0])) {
+                RecordingMidi.check();
                 foundCommand = true;
             }
         }
