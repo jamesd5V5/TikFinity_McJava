@@ -1,6 +1,7 @@
 package org.mammothplugins.recording;
 
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.N;
 import org.mineacademy.fo.Common;
 import org.mineacademy.fo.remain.CompSound;
 import org.mineacademy.fo.remain.Remain;
@@ -34,16 +35,19 @@ public class LiveReceiver implements Receiver {
             if (message instanceof ShortMessage sm) {
                 int key = sm.getData1();
                 int velocity = sm.getData2();
-                int octave = (key / 12) - 1;
+                //int octave = (key / 12) - 1;
+                if (key <= 29)
+                    return;
+                int octave = ((key - 18) / 12); //Centering Around F#
                 int n = key % 12;
                 String noteName = NOTE_NAMES[n];
                 Note note = new Note(noteName, octave, velocity);
 
                 if (sm.getCommand() == ShortMessage.NOTE_ON && velocity != 0) {
-                    if (!Note.containsNote(note)) {
-                        Note.addNote(note);
-                        Common.broadcast("On: " + noteName + "_" + octave + ": " + velocity);
-                    }
+                    Common.broadcast("Key: " + key);
+                    Note.addNote(note);
+                    Common.broadcast("On: " + noteName + "_" + octave + ": " + velocity);
+                    Note.playNote(note);
                 } else if (sm.getCommand() == ShortMessage.NOTE_ON && velocity == 0) {
                     Note.removeNote(note);
                     Common.broadcast("Off: " + noteName);

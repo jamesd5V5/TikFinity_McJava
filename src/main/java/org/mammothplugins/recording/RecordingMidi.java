@@ -47,7 +47,7 @@ public class RecordingMidi {
 
             // seq.deleteTrack(currentTrack);
             sequencer.setSequence(seq);
-            //sequencer.setTickPosition(0);
+            sequencer.setTickPosition(0);
 
             // Start the sequencer and wait for MIDI events to arrive
             sequencer.recordEnable(currentTrack, -1);
