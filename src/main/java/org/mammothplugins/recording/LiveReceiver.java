@@ -44,7 +44,7 @@ public class LiveReceiver implements Receiver {
                         Note.addNote(note);
                         Common.broadcast("On: " + noteName + "_" + octave + ": " + velocity);
                     }
-                } else if (sm.getCommand() == ShortMessage.NOTE_OFF && velocity == 0) {
+                } else if (sm.getCommand() == ShortMessage.NOTE_ON && velocity == 0) {
                     Note.removeNote(note);
                     Common.broadcast("Off: " + noteName);
                 }

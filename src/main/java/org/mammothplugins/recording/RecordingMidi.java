@@ -45,7 +45,7 @@ public class RecordingMidi {
 
             currentTrack = seq.createTrack();
 
-            seq.deleteTrack(currentTrack);
+            // seq.deleteTrack(currentTrack);
             sequencer.setSequence(seq);
             //sequencer.setTickPosition(0);
 
@@ -54,24 +54,13 @@ public class RecordingMidi {
             sequencer.startRecording();
 
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public static void listen() {
+    public static void listen() throws MidiUnavailableException, InvalidMidiDataException {
         if (isRecording)
-            recordingTask = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (isRecording == false) {
-                            cancel();
-                            return;
-                        }
-                        record();
-                    } catch (Exception e) {
-                    }
-                }
-            }.runTaskTimer(Mc_Piano.getInstance(), 0L, 2L);
+            record();
     }
 
     public static void isRecording(boolean r) {

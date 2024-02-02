@@ -7,6 +7,9 @@ import org.mineacademy.fo.Common;
 import org.mineacademy.fo.command.SimpleCommand;
 import org.mineacademy.fo.remain.CompSound;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+
 public class PianoCommands extends SimpleCommand {
     public PianoCommands() {
         super("piano");
@@ -21,7 +24,13 @@ public class PianoCommands extends SimpleCommand {
             if ("on".equalsIgnoreCase(this.args[0])) {
                 Common.tell(getSender(), "Piano is on.");
                 RecordingMidi.isRecording(true);
-                RecordingMidi.listen(); //Starts Loops
+                try {
+                    RecordingMidi.listen(); //Starts Loops
+                } catch (MidiUnavailableException e) {
+                    throw new RuntimeException(e);
+                } catch (InvalidMidiDataException e) {
+                    throw new RuntimeException(e);
+                }
 
                 foundCommand = true;
             }

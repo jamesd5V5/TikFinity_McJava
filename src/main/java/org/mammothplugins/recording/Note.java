@@ -47,7 +47,7 @@ public class Note {
 
     public static void removeNote(Note note) {
         if (containsNote(note))
-            currentNotes.add(note);
+            currentNotes.remove(note);
     }
 
 }
