@@ -1,0 +1,17 @@
+Mc Piano
+Started Feb 2024
+
+======================================================
+
+Changes
+-Major/Minor/Diminished
+-Go Up a 5th
+
+-Octaves
+-Arpeggios up/down
+
+-Different instrument
+
+-Velocity speed of somethings
+
+

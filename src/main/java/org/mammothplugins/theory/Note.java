@@ -1,9 +1,8 @@
-package org.mammothplugins.recording;
+package org.mammothplugins.theory;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
-import org.mineacademy.fo.Common;
 import org.mineacademy.fo.remain.CompSound;
 import org.mineacademy.fo.remain.Remain;
 
@@ -15,8 +14,11 @@ public class Note {
     @Setter
     private static ArrayList<Note> currentNotes = new ArrayList<>();
 
+    @Getter
     private String noteName;
+    @Getter
     private int octave;
+    @Getter
     private int velocity;
 
     public Note(String noteName, int octave, int velocity) {
@@ -53,13 +55,30 @@ public class Note {
         return false;
     }
 
+    public static boolean containsNoteWithinOctave(String noteName, int octave) {
+        for (int i = 0; i < currentNotes.size(); i++)
+            if (currentNotes.get(i).noteName.equals(noteName) && (currentNotes.get(i).octave == octave
+                    || currentNotes.get(i).octave == octave - 1) || currentNotes.get(i).octave == octave + 1)
+                return true;
+
+        return false;
+    }
+
     public static void addNote(Note note) {
         currentNotes.add(note);
     }
 
     public static void removeNote(Note note) {
-        if (containsNote(note))
-            currentNotes.remove(note);
+        if (containsNote(note, false))
+            for (int i = 0; i < currentNotes.size(); i++)
+                if (currentNotes.get(i).noteName.equals(note.noteName) && currentNotes.get(i).octave == note.octave) {
+                    currentNotes.remove(i);
+                    break;
+                }
+    }
+
+    public static void clearNotes() {
+        currentNotes.clear();
     }
 
     public static void playNote(Note note) {

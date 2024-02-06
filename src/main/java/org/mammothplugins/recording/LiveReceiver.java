@@ -1,16 +1,16 @@
 package org.mammothplugins.recording;
 
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.units.qual.N;
+import org.mammothplugins.theory.Chords;
+import org.mammothplugins.theory.Note;
 import org.mineacademy.fo.Common;
 import org.mineacademy.fo.remain.CompSound;
 import org.mineacademy.fo.remain.Remain;
 
 import javax.sound.midi.MidiMessage;
-import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class LiveReceiver implements Receiver {
@@ -44,7 +44,6 @@ public class LiveReceiver implements Receiver {
                 Note note = new Note(noteName, octave, velocity);
 
                 if (sm.getCommand() == ShortMessage.NOTE_ON && velocity != 0) {
-                    Common.broadcast("Key: " + key);
                     Note.addNote(note);
                     Common.broadcast("On: " + noteName + "_" + octave + ": " + velocity);
                     Note.playNote(note);

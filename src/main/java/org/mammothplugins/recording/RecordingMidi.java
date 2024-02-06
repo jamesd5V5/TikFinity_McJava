@@ -4,7 +4,12 @@ import lombok.Getter;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.mammothplugins.mc_piano.Mc_Piano;
+import org.mammothplugins.theory.Note;
+import org.mammothplugins.theory.TheoryBase;
 import org.mineacademy.fo.Common;
+import org.mineacademy.fo.RandomUtil;
+import org.mineacademy.fo.remain.CompParticle;
+import org.mineacademy.fo.remain.CompSound;
 
 import javax.sound.midi.*;
 
@@ -59,8 +64,20 @@ public class RecordingMidi {
     }
 
     public static void listen() throws MidiUnavailableException, InvalidMidiDataException {
-        if (isRecording)
+        if (isRecording) {
             record();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (isRecording() == false) {
+                        cancel();
+                        return;
+                    }
+                    TheoryBase.checkNotes();
+                }
+            }.runTaskTimer(Mc_Piano.getInstance(), 0, 2L);
+        }
+
     }
 
     public static void isRecording(boolean r) {
@@ -96,6 +113,8 @@ public class RecordingMidi {
                 seq = null;
                 currentTrack = null;
                 transmitter = null;
+
+                Note.clearNotes();
             }
         } catch (Exception e) {
         }
