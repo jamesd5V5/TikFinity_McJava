@@ -3,6 +3,7 @@ package org.mammothplugins.theory;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
+import org.mineacademy.fo.Common;
 import org.mineacademy.fo.remain.CompSound;
 import org.mineacademy.fo.remain.Remain;
 
@@ -57,10 +58,9 @@ public class Note {
 
     public static boolean containsNoteWithinOctave(String noteName, int octave) {
         for (int i = 0; i < currentNotes.size(); i++)
-            if (currentNotes.get(i).noteName.equals(noteName) && (currentNotes.get(i).octave == octave
-                    || currentNotes.get(i).octave == octave - 1) || currentNotes.get(i).octave == octave + 1)
+            if (currentNotes.get(i).getNoteName().equals(noteName) && (currentNotes.get(i).getOctave() == octave
+                    || currentNotes.get(i).getOctave() == octave - 1 || currentNotes.get(i).getOctave() == octave + 1))
                 return true;
-
         return false;
     }
 

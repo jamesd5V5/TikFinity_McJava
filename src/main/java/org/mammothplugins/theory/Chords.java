@@ -4,7 +4,63 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Chords {
-    static String[] notes = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+    static String[] generalNotes = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+
+    private String[] notes;
+    private String chordType;
+    private String rootNote;
+
+    public Chords(String[] notes) {
+        this.notes = notes;
+    }
+
+    public int getSize() {
+        return this.notes.length;
+    }
+
+    public String getNote(int i) {
+        return notes[i];
+    }
+
+    public String getChordType() {
+        if (chordType == null)
+            if (getSize() == 3) {
+                if (isMajor(notes))
+                    chordType = "Major";
+                if (isMinor(notes))
+                    chordType = "Minor";
+            }
+
+
+        return chordType;
+    }
+
+    public String getRootNote() {
+        if (getChordType() != null && rootNote == null) {
+            for (String noteName : notes) {
+                if (getSize() >= 3) {
+                    String[] majorChord = Chords.getMajorChord(noteName);
+                    String[] minorChord = Chords.getMinorChord(noteName);
+
+                    if (inRange(majorChord, 6) || inRange(minorChord, 6))
+                        return noteName;
+                }
+            }
+        }
+        return rootNote;
+    }
+
+    private boolean inRange(String[] chord, int octave) {
+        for (int i = 0; i < chord.length; i++)
+            if (!(Note.containsNoteWithinOctave(chord[i], octave))) //hardcoded to 6 for now,
+                return false;
+        return true;
+    }
+
+    //<editor-fold desc="Static Methods">
+    //=======================================================================
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~STATIC~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //=======================================================================
 
     public static boolean isMajor(String[] chord) {
         String stringChord = String.join(" ", chord);
@@ -40,8 +96,8 @@ public class Chords {
         String third = "";
         String fifth = "";
 
-        for (int i = 0; i < notes.length; i++)
-            if (notes[i].equals(root)) {
+        for (int i = 0; i < generalNotes.length; i++)
+            if (generalNotes[i].equals(root)) {
                 third = getNoteFromInterval(i, 4);
                 fifth = getNoteFromInterval(i, 7);
             }
@@ -54,8 +110,8 @@ public class Chords {
         String third = "";
         String fifth = "";
 
-        for (int i = 0; i < notes.length; i++)
-            if (notes[i].equals(root)) {
+        for (int i = 0; i < generalNotes.length; i++)
+            if (generalNotes[i].equals(root)) {
                 third = getNoteFromInterval(i, 3);
                 fifth = getNoteFromInterval(i, 7);
             }
@@ -98,8 +154,9 @@ public class Chords {
 
     private static String getNoteFromInterval(int i, int interval) {
         int indexOfNote = i + interval;
-        if (notes.length <= i + interval)
-            indexOfNote = (i + interval) - notes.length;
-        return notes[indexOfNote];
+        if (generalNotes.length <= i + interval)
+            indexOfNote = (i + interval) - generalNotes.length;
+        return generalNotes[indexOfNote];
     }
+    //</editor-fold>
 }
