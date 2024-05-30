@@ -18,7 +18,11 @@ public class TheoryBase {
                 notes[i] = currentNotes.get(i).getNoteName();
 
             Chords chord = new Chords(notes);
-            Common.broadcast(chord.getRootNote() + "___" + chord.getChordType());
+            String rootNode = chord.getRootNote() == null ? "" : chord.getRootNote();
+            String chordType = chord.getChordType() == null ? "" : chord.getChordType();
+            String okay = (rootNode == null && chordType == null) ? null : rootNode + " " + chordType;
+            if (okay != null)
+                Common.broadcast(okay);
 //            for (Note note : currentNotes) {
 //                matchChords(note);
 //            }

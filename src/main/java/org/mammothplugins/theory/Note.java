@@ -56,6 +56,17 @@ public class Note {
         return false;
     }
 
+    public static boolean containsNoteWithinOctave(String noteName) {
+        for (int i = 1; i < currentNotes.size(); i++) {
+            int octave1 = currentNotes.get(i).getOctave();
+            int octave2 = currentNotes.get(i - 1).getOctave();
+            if (currentNotes.get(i).getNoteName().equals(noteName) && (octave1 == octave2
+                    || octave1 == octave2 - 1 || octave1 == octave2 + 1))
+                return true;
+        }
+        return false;
+    }
+
     public static boolean containsNoteWithinOctave(String noteName, int octave) {
         for (int i = 0; i < currentNotes.size(); i++)
             if (currentNotes.get(i).getNoteName().equals(noteName) && (currentNotes.get(i).getOctave() == octave
@@ -84,12 +95,14 @@ public class Note {
     public static void playNote(Note note) {
         for (Player player : Remain.getOnlinePlayers()) {
             int octave = note.octave;
+            
+            float volume = (float) (note.velocity - 5) / (100 - 5);
             if (octave <= 2)
-                CompSound.NOTE_BASS.play(player, CompSound.DEFAULT_VOLUME, getFrequency(note, 1));
+                CompSound.NOTE_BASS.play(player, volume, getFrequency(note, 1));
             else if (octave <= 4)
-                CompSound.NOTE_PIANO.play(player, CompSound.DEFAULT_VOLUME, getFrequency(note, 3));
+                CompSound.NOTE_PIANO.play(player, volume, getFrequency(note, 3));
             else if (octave <= 6)
-                CompSound.BLOCK_NOTE_BLOCK_BELL.play(player, CompSound.DEFAULT_VOLUME, getFrequency(note, 5));
+                CompSound.BLOCK_NOTE_BLOCK_BELL.play(player, volume, getFrequency(note, 5));
         }
     }
 

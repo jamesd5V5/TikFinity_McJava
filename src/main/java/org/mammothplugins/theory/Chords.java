@@ -1,5 +1,7 @@
 package org.mammothplugins.theory;
 
+import org.mineacademy.fo.Common;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -24,11 +26,13 @@ public class Chords {
 
     public String getChordType() {
         if (chordType == null)
-            if (getSize() == 3) {
+            if (getSize() >= 3) {
                 if (isMajor(notes))
                     chordType = "Major";
-                if (isMinor(notes))
+                else if (isMinor(notes))
                     chordType = "Minor";
+                else
+                    chordType = null;
             }
 
 
@@ -36,18 +40,35 @@ public class Chords {
     }
 
     public String getRootNote() {
-        if (getChordType() != null && rootNote == null) {
+        if (rootNote == null) {
             for (String noteName : notes) {
                 if (getSize() >= 3) {
                     String[] majorChord = Chords.getMajorChord(noteName);
                     String[] minorChord = Chords.getMinorChord(noteName);
 
-                    if (inRange(majorChord, 6) || inRange(minorChord, 6))
-                        return noteName;
+                    if (isChordContained(notes, majorChord) || isChordContained(notes, minorChord)) {
+                        rootNote = noteName;
+                        return rootNote;
+                    }
                 }
             }
         }
         return rootNote;
+    }
+
+    private boolean isChordContained(String[] chord, String[] targetChord) {
+        ArrayList<String> chordList = new ArrayList<>(Arrays.asList(chord));
+        for (String note : targetChord)
+            if (!chordList.contains(note))
+                return false;
+        return true;
+    }
+
+    private boolean inRange(String[] chord) {
+        for (int i = 0; i < chord.length; i++)
+            if (!(Note.containsNoteWithinOctave(chord[i]))) //hardcoded to 6 for now,
+                return false;
+        return true;
     }
 
     private boolean inRange(String[] chord, int octave) {
@@ -56,6 +77,7 @@ public class Chords {
                 return false;
         return true;
     }
+
 
     //<editor-fold desc="Static Methods">
     //=======================================================================
@@ -70,8 +92,9 @@ public class Chords {
             for (int e = 0; e < majChord.length; e++) {
                 if (!stringChord.contains(majChord[e]))
                     containsAll = false;
-                if (e == majChord.length - 1 && containsAll == true)
+                if (e == majChord.length - 1 && containsAll == true) {
                     return true;
+                }
             }
         }
         return false;
