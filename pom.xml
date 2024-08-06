@@ -7,10 +7,10 @@
     <groupId>org.mammothplugins</groupId>
 
     <!-- Change to your plugin name, must be lower cased and match your end package name. No spaces. -->
-    <artifactId>mc_piano</artifactId>
+    <artifactId>tiktoklive</artifactId>
 
     <!-- Change to your plugin's name. Can contain capital letters, but do NOT use spaces. -->
-    <name>Mc_Piano</name>
+    <name>TikTokLive</name>
 
     <!-- Change to the appropriate plugin's version, starting at 1.0.0. -->
     <version>1.0.0</version>
@@ -24,7 +24,7 @@
         <author>jamesd5</author>
 
         <!-- Change to the full path where your main plugin class is located. -->
-        <main.class>org.mammothplugins.mc_piano.Mc_Piano</main.class>
+        <main.class>org.mammothplugins.tiktoklive.TikTokLive</main.class>
 
         <!-- Change the Java version this plugin is built on.
 
