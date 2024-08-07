@@ -1,17 +1,19 @@
-Mc Piano
-Started Feb 2024
+TikFInity_McJava
+Started August 2024
 
 ======================================================
+Chat Msg: Mc Username
 
-Changes
--Major/Minor/Diminished
--Go Up a 5th
+-Give 5 min timer, then un-activate PlayerCache?
 
--Octaves
--Arpeggios up/down
+-Interact System (Likes, Follow)
+Upgrades personal mobs
 
--Different instrument
+-Gifts
 
--Velocity speed of somethings
+Ranking System:
+Also Can't handle action per like, so min amount of likes calls commands
 
+Ultimate SnowGolem/Iron Golem Boss
 
+Fighting Cage
