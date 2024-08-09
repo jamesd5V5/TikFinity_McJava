@@ -3,6 +3,7 @@ package org.mammothplugins.command;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.mammothplugins.events.EventZombie;
+import org.mammothplugins.users.FetchPlayer;
 import org.mammothplugins.users.PlayerCache;
 import org.mammothplugins.tool.Locations;
 import org.mineacademy.fo.Common;
@@ -51,6 +52,7 @@ public class ConnectCommands extends SimpleCommand {
             //tk username zombies
             String username = args[0];
             PlayerCache playerCache = PlayerCache.from(username);
+            Common.broadcast("Does Player Exist: " + FetchPlayer.doesPlayerExist(username));
             if ("info".equalsIgnoreCase(this.args[1])) {
                 Common.broadcast("==================================");
                 Common.broadcast("Follows: " + playerCache.isFollowing());
