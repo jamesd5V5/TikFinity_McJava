@@ -2,6 +2,7 @@ package org.mammothplugins.users;
 
 //import org.json.JSONObject;
 
+import org.mineacademy.fo.Common;
 import org.mineacademy.fo.jsonsimple.JSONObject;
 
 import java.io.BufferedReader;
@@ -9,6 +10,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FetchPlayer {
 
@@ -32,6 +37,16 @@ public class FetchPlayer {
     }
 
     public static boolean doesPlayerExist(String username) {
+        if (username.length() < 3 && username.length() > 16) {
+            Common.broadcast("Not right length");
+            return false;
+        }
+        Pattern special = Pattern.compile("[!@#$%&*()+=|<>?{}\\[\\]~-]");
+        Matcher hasSpecial = special.matcher(username);
+        if (hasSpecial.find()) {
+            Common.broadcast("Found Special Chracter");
+            return false;
+        }
         try {
             if (getPlayerJson(username) != null)
                 return true;

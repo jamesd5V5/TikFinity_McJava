@@ -1,30 +1,28 @@
 package org.mammothplugins.users;
 
-import org.mineacademy.fo.Common;
-
 public class Rankings {
 
-    private static Ranks[] ranks = Ranks.values();
+    private static Levels[] ranks = Levels.values();
 
-    public static boolean canUpgradeWithLikes(int totalLikes, int currentRank) {
-        if (isMaxedRank(currentRank))
+    public static boolean canUpgradeWithLikes(int totalLikes, int currentLvl) {
+        if (isMaxedLvl(currentLvl))
             return false;
-        Ranks nextRank = ranks[currentRank + 1];
-        //Common.broadcast("Current Rank: " + currentRank + "Next Points: " + nextRank.getPoints());
+        Levels nextRank = ranks[currentLvl + 1];
+        //Common.broadcast("Current Rank: " + currentLvl + "Next Points: " + nextRank.getPoints());
         if (totalLikes >= nextRank.getPoints())
             return true;
         return false;
     }
 
-    public static boolean canUpgradeWithGifts(int currentRank) {
-        if (isMaxedRank(currentRank))
+    public static boolean canUpgradeWithGifts(int currentLvl) {
+        if (isMaxedLvl(currentLvl))
             return false;
 
         return false;
     }
 
-    public static boolean isMaxedRank(int currentRank) {
-        //Common.broadcast("Ranks Length: " + ranks.length + " ==== Current: " + currentRank + " Bool: " + (currentRank >= ranks.length));
-        return currentRank >= ranks.length - 1 ? true : false;
+    public static boolean isMaxedLvl(int currentLvl) {
+        //Common.broadcast("Ranks Length: " + ranks.length + " ==== Current: " + currentLvl + " Bool: " + (currentLvl >= ranks.length));
+        return currentLvl >= ranks.length - 1 ? true : false;
     }
 }

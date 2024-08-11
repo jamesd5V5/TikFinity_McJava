@@ -30,8 +30,7 @@ public class ConnectCommands extends SimpleCommand {
                 Common.broadcast("&7SpawnerLocation has been set.");
 
                 foundCommand = true;
-            }
-            if ("save".equalsIgnoreCase(this.args[0])) {
+            } else if ("save".equalsIgnoreCase(this.args[0])) {
                 for (String username : PlayerCache.getUsernames()) {
                     PlayerCache playerCache = PlayerCache.from(username);
                     playerCache.save();
@@ -39,12 +38,21 @@ public class ConnectCommands extends SimpleCommand {
                 Common.broadcast("&7Saved All PlayerCaches.");
 
                 foundCommand = true;
-            }
-            if ("wipe".equalsIgnoreCase(this.args[0])) {
+            } else if ("wipe".equalsIgnoreCase(this.args[0])) {
                 PlayerCache.clearCaches();
                 PlayerCache basic = PlayerCache.from("jamesd5");
                 basic.save();
                 Common.broadcast("&7Cleared All PlayerCaches.");
+                foundCommand = true;
+            } else {
+                String username = args[0];
+                if (FetchPlayer.doesPlayerExist(username)) {
+                    PlayerCache playerCache = PlayerCache.from(username);
+                    playerCache.setPlayerName(username);
+                    Common.broadcast("User has connect to the mc account " + username);
+                } else {
+                    Common.broadcast("&cMc Account " + username + " does not exist.");
+                }
                 foundCommand = true;
             }
         }
@@ -52,13 +60,20 @@ public class ConnectCommands extends SimpleCommand {
             //tk username zombies
             String username = args[0];
             PlayerCache playerCache = PlayerCache.from(username);
-            Common.broadcast("Does Player Exist: " + FetchPlayer.doesPlayerExist(username));
             if ("info".equalsIgnoreCase(this.args[1])) {
                 Common.broadcast("==================================");
                 Common.broadcast("Follows: " + playerCache.isFollowing());
-                Common.broadcast("Rank: " + playerCache.getRank());
+                Common.broadcast("Rank: " + playerCache.getRank() + "_" + playerCache.getTierOfRank() + " (" + playerCache.getLevel() + ")");
+                Common.broadcast("Player: " + playerCache.getPlayerName());
                 Common.broadcast("Likes: " + playerCache.getCurrentLikes() + "/" + playerCache.getTotalLikes());
                 Common.broadcast("==================================");
+                foundCommand = true;
+            }
+            if ("follows".equalsIgnoreCase(this.args[1])) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    Common.tell(player, "&7User " + username + " followed!");
+                    playerCache.setIsFollowing(true);
+                }
                 foundCommand = true;
             }
             if ("likes".equalsIgnoreCase(this.args[1])) {
@@ -79,7 +94,7 @@ public class ConnectCommands extends SimpleCommand {
             }
             if ("reset".equalsIgnoreCase(this.args[1])) {
                 playerCache.resetTotalLikes();
-                playerCache.resetRank();
+                playerCache.resetLvl();
                 //playerCache.resetCurrentGifts();
                 Common.broadcast("User " + username + " has been reset.");
                 foundCommand = true;
@@ -93,6 +108,14 @@ public class ConnectCommands extends SimpleCommand {
                     for (int i = 0; i < (Integer.parseInt(args[2])); i++)
                         playerCache.addCurrentLikes();
                     Common.tell(player, "&7User " + username + " sent " + args[2] + " Likes!" + " Total: " + playerCache.getTotalLikes());
+                }
+                foundCommand = true;
+            }
+            if ("lvl".equalsIgnoreCase(this.args[1])) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    for (int i = 0; i < (Integer.parseInt(args[2])); i++)
+                        playerCache.advanceLvl();
+                    Common.tell(player, "&7User " + username + " has advanced to Rank " + playerCache.getLevels().getChatColor() + playerCache.getRank() + "_" + playerCache.getTierOfRank() + "(" + playerCache.getLevel() + ")!");
                 }
                 foundCommand = true;
             }
@@ -116,6 +139,7 @@ public class ConnectCommands extends SimpleCommand {
         list2.add("reset");
         list2.add("info");
         list2.add("likes");
+        list2.add("lvl");
 
         return this.args.length == 1 ? list1 : list2;
     }

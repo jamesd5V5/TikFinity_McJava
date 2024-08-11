@@ -10,6 +10,8 @@ public class TikTokLive extends SimplePlugin {
     protected void onPluginStart() {
         registerCommand(new ConnectCommands());
         registerEvents(new EventListener());
+
+        HeartBeat.runEvery5Mins();
     }
 
     @Override

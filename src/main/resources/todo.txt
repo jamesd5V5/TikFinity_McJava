@@ -4,15 +4,9 @@ Started August 2024
 ======================================================
 Chat Msg: Mc Username
 
--Give 5 min timer, then un-activate PlayerCache?
-
--Interact System (Likes, Follow)
-Upgrades personal mobs
-
--Gifts
-
-Ranking System:
-Also Can't handle action per like, so min amount of likes calls commands
+*Every5Mins may need to remove unactive PlayerCaches.
+-Interact System may not interact per like, so set a min.
+-Gifts/Following, just advance more pts
 
 Ultimate SnowGolem/Iron Golem Boss
 

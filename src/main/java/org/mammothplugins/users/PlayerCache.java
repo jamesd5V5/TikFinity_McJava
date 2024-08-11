@@ -21,7 +21,8 @@ public final class PlayerCache extends YamlConfig {
 
     private static volatile Map<String, PlayerCache> cacheMap = new HashMap<>();
     private final String username;
-    private int rank;
+    private String playerName;
+    private int level;
 
     private boolean isFollowing;
     private int totalLikes;
@@ -39,7 +40,8 @@ public final class PlayerCache extends YamlConfig {
 
     @Override
     protected void onLoad() {
-        this.rank = getInteger("Rank", 0);
+        this.level = getInteger("Level", 0);
+        this.playerName = getString("PlayerName", null);
         this.isFollowing = getBoolean("Follows", false);
         this.totalLikes = getInteger("TotalLikes", 0);
         //this.currentLikes = getMap("TotalGifts")
@@ -48,7 +50,8 @@ public final class PlayerCache extends YamlConfig {
 
     @Override
     public void onSave() {
-        this.set("Rank", this.rank);
+        this.set("Level", this.level);
+        this.set("PlayerName", this.playerName);
         this.set("Follows", this.isFollowing);
         this.set("TotalLikes", this.totalLikes);
         //this.set("TotalGifts", this.totalGifts);
@@ -64,28 +67,47 @@ public final class PlayerCache extends YamlConfig {
         return Objects.hashCode(this.username);
     }
 
-    public Ranks getRanks() {
-        for (Ranks r : Ranks.values()) {
-            if (r.getRank() == rank)
-                return r;
+    public boolean hasConnectedMinecraftAccount() {
+        return playerName == null ? false : true;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public Levels getLevels() {
+        for (Levels l : Levels.values()) {
+            if (l.getLvl() == level)
+                return l;
         }
-        return null;
+        return Levels.RANK6;
     }
 
     public int getTotalPointsToUpgrade() {
-        return getRanks().getPoints();
+        return getLevels().getPoints();
     }
 
-    public void advanceRank() {
-        this.rank++;
+    public boolean advanceLvl() {
+        if (Rankings.isMaxedLvl(getLevel()))
+            return false;
+        this.level++;
 
-        Common.broadcast("&6&l" + username + " just advanced to rank " + rank + "!");
+        Common.broadcast("&6&l" + username + " just advanced to lvl " + level + "!");
         for (Player player : Bukkit.getOnlinePlayers())
             CompSound.VILLAGER_YES.play(player.getLocation());
+        return true;
     }
 
-    public void setRank(int rank) {
-        this.rank = rank;
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getRank() {
+        return getLevels().getRank();
+    }
+
+    public int getTierOfRank() {
+        return getLevels().getTierOfRank();
     }
 
     public void setIsFollowing(boolean isFollowing) {
@@ -96,8 +118,8 @@ public final class PlayerCache extends YamlConfig {
         this.currentLikes++;
         this.totalLikes++;
 
-        if (Rankings.canUpgradeWithLikes(totalLikes, rank) == true)
-            advanceRank();
+        if (Rankings.canUpgradeWithLikes(totalLikes, level) == true)
+            advanceLvl();
     }
 
     public void resetCurrentLikes() {
@@ -109,8 +131,8 @@ public final class PlayerCache extends YamlConfig {
     }
 
     //Testing Methods
-    public void resetRank() {
-        this.rank = 0;
+    public void resetLvl() {
+        this.level = 0;
     }
 
     public void resetTotalLikes() {
