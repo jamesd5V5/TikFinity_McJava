@@ -1,16 +1,44 @@
 package org.mammothplugins.tiktoklive;
 
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.mammothplugins.events.EventBoss;
 import org.mammothplugins.users.PlayerCache;
 import org.mineacademy.fo.Common;
+import org.mineacademy.fo.remain.Remain;
 
 public class HeartBeat extends BukkitRunnable {
+
+    private Player pltmchild;
+    private boolean isOnCooldown;
+
+    public HeartBeat(Player pltmchild) {
+        this.pltmchild = pltmchild;
+        this.isOnCooldown = false;
+    }
+
     @Override
     public void run() {
-        for (String username : PlayerCache.getUsernames()) {
-            PlayerCache playerCache = PlayerCache.from(username);
-            //May take much power to run... So may hvae just have to hardcode somthing in PlayerCache
+        if (EventBoss.isActiveBoss()) {
+            Remain.sendActionBar(pltmchild, "&cBoss Health: " + EventBoss.getBossHealth() + "/" + EventBoss.getBossMaxHealth());
+        } else if (isOnCooldown == false) {
+            isOnCooldown = true;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    EventBoss eventBoss = new EventBoss(pltmchild);
+                    eventBoss.runEvent();
+                    isOnCooldown = false;
+                }
+            }.runTaskLater(TikTokLive.getInstance(), 100);
         }
+
+//        for (String username : PlayerCache.getUsernames()) {
+//            PlayerCache playerCache = PlayerCache.from(username);
+//            //May take much power to run... So may hvae just have to hardcode somthing in PlayerCache
+//
+//
+//        }
     }
 
     public static void runEvery5Mins() {

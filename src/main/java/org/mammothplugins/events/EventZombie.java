@@ -1,26 +1,22 @@
 package org.mammothplugins.events;
 
-import lombok.Getter;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.mammothplugins.users.PlayerCache;
 import org.mammothplugins.tiktoklive.TikTokLive;
 import org.mammothplugins.tool.Locations;
 import org.mammothplugins.users.Rankings;
 import org.mineacademy.fo.menu.model.ItemCreator;
-import org.mineacademy.fo.model.SimpleEnchant;
 import org.mineacademy.fo.remain.CompMaterial;
 import org.mineacademy.fo.remain.CompSound;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class EventZombie extends EventClass {
 
@@ -37,15 +33,16 @@ public class EventZombie extends EventClass {
     @Override
     public void runEvent() {
         World world = player.getWorld();
+        Location location = new Locations("Spawners").pickRandomMobLocation().add(0, 2, 0);
         playSound();
 
         int tickCount = 0;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             tickCount += 3;
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    Zombie zombie = world.spawn(new Locations("Spawner").getSpawnLocation().add(0, 2, 0), Zombie.class);
+                    Zombie zombie = world.spawn(location, Zombie.class);
                     customZombie(zombie);
                     CompSound.NOTE_PLING.play(player, 0.2f, 1f);
                 }
@@ -61,6 +58,8 @@ public class EventZombie extends EventClass {
     private void customZombie(Zombie zombie) {
         zombie.setCustomName(playerCache.getLevels().getChatColor() + tkUsername);
         zombie.setCustomNameVisible(true);
+        
+        zombie.getEquipment().clear();
         if (playerCache.hasConnectedMinecraftAccount())
             zombie.getEquipment().setHelmet(ItemCreator.of(CompMaterial.PLAYER_HEAD, tkUsername + "'s head", "").skullOwner(playerCache.getPlayerName()).make());
 
