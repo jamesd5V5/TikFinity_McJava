@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.mineacademy.fo.Common;
@@ -27,7 +28,7 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onEntityTakeDamage(EntityDamageByEntityEvent event) {
+    public void onEntityTakeDamageByEntity(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
 
         if (entity instanceof IronGolem) {
@@ -41,6 +42,17 @@ public class EventListener implements Listener {
             } else
                 EventBoss.setBossHealth(((IronGolem) entity).getHealth());
         }
+    }
+
+    @EventHandler
+    public void onEntityTakeDamage(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
+
+        if (entity instanceof Zombie)
+            if (event.getCause().equals(EntityDamageEvent.DamageCause.FIRE)) {
+                event.getEntity().setFireTicks(0);
+                event.setCancelled(true);
+            }
     }
 
     @EventHandler

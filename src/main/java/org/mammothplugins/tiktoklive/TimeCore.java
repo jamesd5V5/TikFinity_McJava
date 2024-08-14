@@ -21,7 +21,7 @@ public class TimeCore {
 
         heartBeat = new HeartBeat(player);
         heartBeat.runTaskTimer(TikTokLive.getInstance(), 0l, 10l);
-        Common.broadcast("&7McJava has started.");
+        Common.log("&7McJava has started.");
     }
 
     public static void stop(Player player) {
@@ -29,7 +29,7 @@ public class TimeCore {
             entity.remove();
         EventBoss.setActiveBoss(false);
         heartBeat.cancel();
-        Common.broadcast("&cMcJava has stopped.");
+        Common.log("&cMcJava has stopped.");
 
         int count = 0;
         for (String username : PlayerCache.getUsernames()) {
@@ -38,5 +38,9 @@ public class TimeCore {
             count++;
         }
         Common.broadcast("&7Saved " + count + " PlayerCaches.");
+    }
+
+    public static HeartBeat getHeartBeat() {
+        return heartBeat;
     }
 }

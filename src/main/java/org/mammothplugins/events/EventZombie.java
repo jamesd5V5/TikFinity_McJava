@@ -52,13 +52,13 @@ public class EventZombie extends EventClass {
     }
 
     protected void playSound() {
-        CompSound.ZOMBIE_METAL.play(player, 1f, -0.4f);
+        CompSound.NOTE_BASS.play(player, 1f, -0.4f);
     }
 
     private void customZombie(Zombie zombie) {
         zombie.setCustomName(playerCache.getLevels().getChatColor() + tkUsername);
         zombie.setCustomNameVisible(true);
-        
+
         zombie.getEquipment().clear();
         if (playerCache.hasConnectedMinecraftAccount())
             zombie.getEquipment().setHelmet(ItemCreator.of(CompMaterial.PLAYER_HEAD, tkUsername + "'s head", "").skullOwner(playerCache.getPlayerName()).make());

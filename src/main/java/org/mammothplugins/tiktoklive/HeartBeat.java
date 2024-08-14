@@ -20,7 +20,7 @@ public class HeartBeat extends BukkitRunnable {
     @Override
     public void run() {
         if (EventBoss.isActiveBoss()) {
-            Remain.sendActionBar(pltmchild, "&cBoss Health: " + EventBoss.getBossHealth() + "/" + EventBoss.getBossMaxHealth());
+            Remain.sendActionBar(pltmchild, "&c&lBoss Health: &r&c" + EventBoss.getBossHealth() + "/" + EventBoss.getBossMaxHealth());
         } else if (isOnCooldown == false) {
             isOnCooldown = true;
             new BukkitRunnable() {

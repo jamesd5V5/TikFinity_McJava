@@ -10,6 +10,7 @@ import org.bukkit.entity.Zombie;
 import org.mammothplugins.events.EventBoss;
 import org.mammothplugins.events.EventZombie;
 import org.mammothplugins.tiktoklive.HeartBeat;
+import org.mammothplugins.tiktoklive.StressTest;
 import org.mammothplugins.tiktoklive.TikTokLive;
 import org.mammothplugins.tiktoklive.TimeCore;
 import org.mammothplugins.users.FetchPlayer;
@@ -116,7 +117,8 @@ public class ConnectCommands extends SimpleCommand {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     EventZombie event = new EventZombie(player, username);
                     event.runEvent();
-                    Common.tell(player, "&6&lUser " + username + " sent Zombies!");
+                    //Common.tell(player, "&6&lUser " + username + " sent Zombies!");
+                    //Remain.send
 
                 }
                 foundCommand = true;
@@ -151,6 +153,12 @@ public class ConnectCommands extends SimpleCommand {
                     EventBoss event = new EventBoss(player);
                     event.runEvent();
                 }
+                foundCommand = true;
+            }
+            if ("stress".equalsIgnoreCase(this.args[0])) {
+                StressTest stressTest = new StressTest(getPlayer());
+                stressTest.testZombiesPerSecond(Integer.parseInt(args[1]));
+                Common.broadcast("Running stress test with " + args[1] + " likes a second.");
                 foundCommand = true;
             }
         }
