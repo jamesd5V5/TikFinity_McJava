@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.mammothplugins.users.PlayerCache;
 import org.mineacademy.fo.Common;
 import org.mineacademy.fo.RandomUtil;
 import org.mineacademy.fo.remain.CompParticle;
@@ -35,10 +36,13 @@ public class EventListener implements Listener {
             double dmg = event.getDamage();
             if (((IronGolem) entity).getHealth() - dmg <= 0) { //Boss Died
                 String killerName = event.getDamager().getCustomName();
+                PlayerCache playerCache = PlayerCache.from(killerName);
                 EventBoss.setActiveBoss(false);
                 Common.broadcast("&6" + killerName + " killed " + entity.getCustomName());
                 for (Player player : Bukkit.getOnlinePlayers())
                     Remain.sendActionBar(player, killerName + "&f killed " + entity.getCustomName() + "&f!");
+                playerCache.addCurrentLikes(50);
+
             } else
                 EventBoss.setBossHealth(((IronGolem) entity).getHealth());
         }

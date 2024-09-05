@@ -58,6 +58,8 @@ public class EventBoss extends EventClass {
             if (entity instanceof Zombie)
                 count++;
         int health = 50 + (count * 15);
+        if (health > 2048)
+            health = 2048;
 
         ironGolem.setMaxHealth(health);
         setBossMaxHealth(health);

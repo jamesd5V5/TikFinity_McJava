@@ -8,7 +8,7 @@ import org.mineacademy.fo.Common;
 import org.mineacademy.fo.remain.Remain;
 
 public class HeartBeat extends BukkitRunnable {
-
+    
     private Player pltmchild;
     private boolean isOnCooldown;
 

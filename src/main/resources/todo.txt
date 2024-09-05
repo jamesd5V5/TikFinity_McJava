@@ -8,9 +8,12 @@ Chat Msg: Mc Username
 -Interact System may not interact per like, so set a min.
 -Gifts/Following, just advance more pts
 
-Ultimate SnowGolem/Iron Golem Boss
+Scoreboard on pts? Killing Bosses?
+May have to have lack of interaction, interactions
 
-Fighting Cage
+50 likes when killing boss
+
+Ultimate SnowGolem/Iron Golem Boss
 
 -Post 2-3 vids about old mc videos?
 -Get Tk Live stream pass? ($15)
@@ -18,3 +21,29 @@ Fighting Cage
 -Get Tk 7.5 Views ($5)
 
 -Build new followers based off tags ($28/year -> free 1 week trial)
+
+
+Points:
+[18:33:31 INFO]: [TikTokLive] Rank 0_0(0):  min pts -> 0
+[18:33:31 INFO]: [TikTokLive] Rank 1_1(1):  min pts -> 5
+[18:33:31 INFO]: [TikTokLive] Rank 1_2(2):  min pts -> 12
+[18:33:31 INFO]: [TikTokLive] Rank 1_3(3):  min pts -> 18
+[18:33:31 INFO]: [TikTokLive] Rank 1_4(4):  min pts -> 25
+[18:33:31 INFO]: [TikTokLive] Rank 2_1(5):  min pts -> 31
+[18:33:31 INFO]: [TikTokLive] Rank 2_2(6):  min pts -> 37
+[18:33:31 INFO]: [TikTokLive] Rank 2_3(7):  min pts -> 43
+[18:33:31 INFO]: [TikTokLive] Rank 2_4(8):  min pts -> 50
+[18:33:31 INFO]: [TikTokLive] Rank 3_1(9):  min pts -> 56
+[18:33:31 INFO]: [TikTokLive] Rank 3_2(10):  min pts -> 62
+[18:33:31 INFO]: [TikTokLive] Rank 3_3(11):  min pts -> 68
+[18:33:31 INFO]: [TikTokLive] Rank 3_4(12):  min pts -> 75
+[18:33:31 INFO]: [TikTokLive] Rank 4_1(13):  min pts -> 81
+[18:33:31 INFO]: [TikTokLive] Rank 4_2(14):  min pts -> 87
+[18:33:31 INFO]: [TikTokLive] Rank 4_3(15):  min pts -> 93
+[18:33:31 INFO]: [TikTokLive] Rank 4_4(16):  min pts -> 100
+[18:33:31 INFO]: [TikTokLive] Rank 5_1(17):  min pts -> 106
+[18:33:31 INFO]: [TikTokLive] Rank 5_2(18):  min pts -> 112
+[18:33:31 INFO]: [TikTokLive] Rank 5_3(19):  min pts -> 118
+[18:33:31 INFO]: [TikTokLive] Rank 5_4(20):  min pts -> 125
+[18:33:31 INFO]: [TikTokLive] Rank 6_1(21):  min pts -> 131
+

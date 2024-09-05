@@ -6,13 +6,16 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.mammothplugins.tiktoklive.Values;
 import org.mammothplugins.users.PlayerCache;
 import org.mammothplugins.tiktoklive.TikTokLive;
 import org.mammothplugins.tool.Locations;
 import org.mammothplugins.users.Rankings;
+import org.mineacademy.fo.Common;
 import org.mineacademy.fo.menu.model.ItemCreator;
 import org.mineacademy.fo.remain.CompMaterial;
 import org.mineacademy.fo.remain.CompSound;
+import org.mineacademy.fo.remain.Remain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +40,8 @@ public class EventZombie extends EventClass {
         playSound();
 
         int tickCount = 0;
-        for (int i = 0; i < 3; i++) {
+        Values values = new Values("TikTokValues");
+        for (int i = 0; i < values.getMinLikesToInteract(); i++) {
             tickCount += 3;
             new BukkitRunnable() {
                 @Override
@@ -141,6 +145,16 @@ public class EventZombie extends EventClass {
             else zombie.getEquipment().setItemInMainHand(item);
             count++;
         }
+    }
+
+    public static int getAliveZombies() {
+        int zombieCount = 0;
+        for (Player player : Remain.getOnlinePlayers()) {
+            for (Entity entity : player.getNearbyEntities(10, 10, 10))
+                if (entity instanceof Zombie)
+                    zombieCount++;
+        }
+        return zombieCount;
     }
 
 }

@@ -20,6 +20,8 @@ import java.util.Set;
 public final class PlayerCache extends YamlConfig {
 
     private static volatile Map<String, PlayerCache> cacheMap = new HashMap<>();
+    private static int overallLikes;
+
     private final String username;
     private String playerName;
     private int level;
@@ -88,18 +90,20 @@ public final class PlayerCache extends YamlConfig {
     }
 
     public boolean advanceLvl() {
-        if (Rankings.isMaxedLvl(getLevel()))
-            return false;
-        this.level++;
+        return advanceLvl(1);
+    }
 
-        Common.broadcast("&6&l" + username + " just advanced to lvl " + level + "!");
+    public boolean advanceLvl(int levels) {
+        if (Rankings.isMaxedLvl(getLevel() + levels)) {
+            this.level = Rankings.getMaxLevel();
+            return false;
+        }
+        this.level += levels;
+
+        Common.broadcast("&6&l" + username + " &7just advanced to lvl &6" + level + "&7!");
         for (Player player : Bukkit.getOnlinePlayers())
             CompSound.VILLAGER_YES.play(player.getLocation());
         return true;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
     }
 
     public int getRank() {
@@ -115,29 +119,26 @@ public final class PlayerCache extends YamlConfig {
     }
 
     public void addCurrentLikes() {
-        this.currentLikes++;
-        this.totalLikes++;
+        addCurrentLikes(1);
+    }
+
+    public void addCurrentLikes(int numberOfLikes) {
+        this.currentLikes += numberOfLikes;
+        this.totalLikes += numberOfLikes;
+        overallLikes += numberOfLikes;
 
         if (Rankings.canUpgradeWithLikes(totalLikes, level) == true)
             advanceLvl();
     }
 
-    public void resetCurrentLikes() {
-        this.currentLikes = 0;
-    }
-
-    public void resetCurrentGifts() {
-        this.currentGifts.clear();
-    }
-
-    //Testing Methods
-    public void resetLvl() {
+    public void resetCache() {
         this.level = 0;
-    }
-
-    public void resetTotalLikes() {
-        this.currentLikes = 0;
+        this.playerName = null;
+        this.isFollowing = false;
         this.totalLikes = 0;
+        this.currentLikes = 0;
+        this.totalGifts = new HashMap<>();
+        this.currentGifts = new HashMap<>();
     }
 
     /* ------------------------------------------------------------------------------- */
@@ -183,6 +184,10 @@ public final class PlayerCache extends YamlConfig {
 
     public static Set<String> getUsernames() {
         return cacheMap.keySet();
+    }
+
+    public static int getOverallLikes() {
+        return overallLikes;
     }
 
     public static void clearCaches() {

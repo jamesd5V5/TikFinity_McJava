@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.mammothplugins.events.EventBoss;
+import org.mammothplugins.events.EventZombie;
 import org.mammothplugins.tool.Locations;
 import org.mammothplugins.users.PlayerCache;
 import org.mineacademy.fo.Common;
@@ -25,11 +26,14 @@ public class TimeCore {
     }
 
     public static void stop(Player player) {
+        Common.log("&c======McJava has stopped======");
+        Common.log("&7- Overall Likes: " + PlayerCache.getOverallLikes());
+        Common.log("&7- Zombie count: " + EventZombie.getAliveZombies());
+
         for (Entity entity : player.getNearbyEntities(50, 50, 50))
             entity.remove();
         EventBoss.setActiveBoss(false);
         heartBeat.cancel();
-        Common.log("&cMcJava has stopped.");
 
         int count = 0;
         for (String username : PlayerCache.getUsernames()) {
@@ -37,7 +41,7 @@ public class TimeCore {
             playerCache.save();
             count++;
         }
-        Common.broadcast("&7Saved " + count + " PlayerCaches.");
+        Common.broadcast("&7- Saved " + count + " PlayerCaches.");
     }
 
     public static HeartBeat getHeartBeat() {

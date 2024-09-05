@@ -40,9 +40,10 @@ public enum Levels {
         if (getLvl() == 0)
             return 0;
         else if (getLvl() == 1)
-            return 10;
+            return 5;
         else {
-            return (int) (getLvl() * 1.02);
+            int newProduct = getLvl() * 5;
+            return (int) (newProduct * 1.25); //Basic for now, just for testings
         }
     }
 
