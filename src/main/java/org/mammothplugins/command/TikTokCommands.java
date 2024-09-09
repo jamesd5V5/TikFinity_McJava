@@ -1,33 +1,25 @@
 package org.mammothplugins.command;
 
-import jdk.jfr.Event;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
 import org.mammothplugins.events.EventBoss;
 import org.mammothplugins.events.EventZombie;
 import org.mammothplugins.tiktoklive.*;
-import org.mammothplugins.users.FetchPlayer;
 import org.mammothplugins.users.PlayerCache;
 import org.mammothplugins.tool.Locations;
 import org.mammothplugins.users.Rankings;
 import org.mineacademy.fo.Common;
 import org.mineacademy.fo.command.SimpleCommand;
 import org.mineacademy.fo.remain.CompSound;
-import org.mineacademy.fo.remain.Remain;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConnectCommands extends SimpleCommand {
+public class TikTokCommands extends SimpleCommand {
 
     private boolean foundCommand;
 
-    public ConnectCommands() {
+    public TikTokCommands() {
         super("tk");
         //setPermission("piano.commands");
     }

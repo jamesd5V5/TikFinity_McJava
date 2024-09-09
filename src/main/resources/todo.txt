@@ -2,6 +2,7 @@ TikFInity_McJava
 Started August 2024
 
 ======================================================
+Commands: F3 + p, AltTab
 Chat Msg: Mc Username
 
 *Every5Mins may need to remove unactive PlayerCaches.
@@ -12,6 +13,7 @@ Scoreboard on pts? Killing Bosses?
 May have to have lack of interaction, interactions
 
 50 likes when killing boss
+50 likes when following
 
 Ultimate SnowGolem/Iron Golem Boss
 

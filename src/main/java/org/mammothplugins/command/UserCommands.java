@@ -36,8 +36,7 @@ public class UserCommands extends SimpleCommand {
 
             } else if ("follow".equals(interaction)) {
                 playerCache.setIsFollowing(true);
-                for (int i = 0; i < 50; i++)
-                    playerCache.addCurrentLikes();
+                playerCache.addCurrentLikes(50);
             }
         } else if (this.args.length == 4) {
             if ("mcAccount".equals(interaction)) {
