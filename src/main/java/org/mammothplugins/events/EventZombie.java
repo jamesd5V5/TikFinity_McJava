@@ -47,8 +47,11 @@ public class EventZombie extends EventClass {
                 @Override
                 public void run() {
                     Zombie zombie = world.spawn(location, Zombie.class);
-                    customZombie(zombie);
-                    CompSound.NOTE_PLING.play(player, 0.2f, 1f);
+                    zombie.getEquipment().clear();
+                    if (!tkUsername.equals("jamesd5")) {
+                        customZombie(zombie);
+                        CompSound.NOTE_PLING.play(player, 0.2f, 1f);
+                    }
                 }
             }.runTaskLater(TikTokLive.getInstance(), tickCount);
         }
@@ -63,7 +66,6 @@ public class EventZombie extends EventClass {
         zombie.setCustomName(playerCache.getLevels().getChatColor() + tkUsername);
         zombie.setCustomNameVisible(true);
 
-        zombie.getEquipment().clear();
         if (playerCache.hasConnectedMinecraftAccount())
             zombie.getEquipment().setHelmet(ItemCreator.of(CompMaterial.PLAYER_HEAD, tkUsername + "'s head", "").skullOwner(playerCache.getPlayerName()).make());
 

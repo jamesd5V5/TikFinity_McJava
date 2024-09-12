@@ -38,6 +38,8 @@ public class EventListener implements Listener {
                 String killerName = event.getDamager().getCustomName();
                 PlayerCache playerCache = PlayerCache.from(killerName);
                 EventBoss.setActiveBoss(false);
+                if (killerName == null)
+                    return;
                 Common.broadcast("&6" + killerName + " killed " + entity.getCustomName());
                 for (Player player : Bukkit.getOnlinePlayers())
                     Remain.sendActionBar(player, killerName + "&f killed " + entity.getCustomName() + "&f!");

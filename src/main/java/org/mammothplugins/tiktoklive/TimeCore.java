@@ -22,6 +22,7 @@ public class TimeCore {
 
         heartBeat = new HeartBeat(player);
         heartBeat.runTaskTimer(TikTokLive.getInstance(), 0l, 10l);
+        ZombieTimer.runEvery30Secs();
         Common.log("&7McJava has started.");
     }
 
@@ -47,4 +48,5 @@ public class TimeCore {
     public static HeartBeat getHeartBeat() {
         return heartBeat;
     }
+
 }
