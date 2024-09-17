@@ -5,6 +5,8 @@ Started August 2024
 Commands: F3 + p, AltTab
 Chat Msg: Mc Username
 
+Maybe Stream on Youtube, Watch live on phone?
+
 *Every5Mins may need to remove unactive PlayerCaches.
 -Interact System may not interact per like, so set a min.
 -Gifts/Following, just advance more pts

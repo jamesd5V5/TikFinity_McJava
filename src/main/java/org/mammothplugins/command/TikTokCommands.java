@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.mammothplugins.events.EventBoss;
 import org.mammothplugins.events.EventZombie;
+import org.mammothplugins.livestream.WebSocketIntegration;
 import org.mammothplugins.tiktoklive.*;
 import org.mammothplugins.users.PlayerCache;
 import org.mammothplugins.tool.Locations;
@@ -118,6 +119,9 @@ public class TikTokCommands extends SimpleCommand {
                     playerCache.save();
                 }
                 Common.broadcast("&7Cleared All PlayerCaches.");
+                foundCommand = true;
+            } else if ("connect".equalsIgnoreCase(this.args[0])) {
+                WebSocketIntegration.connectToTikTok();
                 foundCommand = true;
             }
         }
