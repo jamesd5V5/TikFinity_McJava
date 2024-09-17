@@ -8,15 +8,17 @@ import org.mineacademy.fo.Common;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.nio.file.Files;
 
 public class WebSocketIntegration {
 
-    public static void connectToTikTok() {
-        if (getJsFileFromClassPath("TikTokWebSocketConnector.js") == null) {
-            Common.log("Could not locate Js File");
+    public static void connectToTikTok(File pluginFolder) {
+        if (!new File(pluginFolder, "TikTokWebSocketConnector.js").exists()) {
+            Common.log("Could not locate JS file in plugin folder");
             return;
         }
-        Common.log("FOUND Js File!");
+
+        Common.log("FOUND Js File in plugin folder!");
         try {
             // Start the HTTP server for handling WebSocket events
             HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
@@ -25,61 +27,84 @@ public class WebSocketIntegration {
             server.start();
             Common.log("HTTP Server started on port 8080");
 
-            // Start the JavaScript WebSocket client in a new process
-            startJavaScriptWebSocket();
+            // Start the JavaScript WebSocket client
+            startJavaScriptWebSocket(pluginFolder);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void startJavaScriptWebSocket() {
-        try {
-            // Get the JavaScript file from the classpath
-            File jsFile = getJsFileFromClassPath("TikTokWebSocketConnector.js");
-            String scriptPath = jsFile.getAbsolutePath();
-            Common.log("Script Path: " + scriptPath);
+    private static void startJavaScriptWebSocket(File pluginFolder) throws IOException {
+        // Reference the JavaScript file from the plugin's folder
+        File jsFile = new File(pluginFolder, "TikTokWebSocketConnector.js");
 
-            // Start the JavaScript process
-            ProcessBuilder builder = new ProcessBuilder("node", scriptPath);
-            Process process = builder.start();
-
-            Common.log("Started WebSocket JavaScript client");
-
-            // Optionally, capture and log the output of the JavaScript process
-            new Thread(() -> {
-                try (var reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        Common.log("JS Client Output: " + line);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static File getJsFileFromClassPath(String fileName) {
-        // Get the URL of the resource
-        URL resourceUrl = WebSocketIntegration.class.getResource(fileName);
-        if (resourceUrl == null) {
-            Common.log("Resource Not Found");
-            return null;
-        }
-
-        // Convert URL to file path
-        File jsFile = new File(resourceUrl.getFile());
         if (!jsFile.exists()) {
-            Common.log("Js Not Found");
+            Common.log("Could not find JavaScript file in the plugin folder!");
+            return;
+        }
+
+        // Use Node.js to run the JavaScript file
+        String nodePath = "C:\\Program Files\\nodejs\\node.exe";
+        ProcessBuilder builder = new ProcessBuilder(nodePath, jsFile.getAbsolutePath());
+        Process process = null;
+        try {
+            process = builder.start();
+        } catch (Exception e) {
+            Common.log("Failed to locate Node.js. Please make sure Node.js is installed with 'Program Files\nodejs\node.exe'.");
+        }
+
+        Common.log("Started WebSocket JavaScript client from plugin folder");
+
+        // Optionally capture the output of the JavaScript process
+        Process finalProcess = process;
+        new Thread(() -> {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(finalProcess.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    Common.log("JS Client Output: " + line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private static InputStream getJsFileFromClassPath(String fileName) {
+        // Get the resource as an InputStream
+        InputStream resourceStream = WebSocketIntegration.class.getClassLoader().getResourceAsStream("org/mammothplugins/livestream/" + fileName);
+
+        if (resourceStream == null) {
+            Common.log("Resource Not Found: " + fileName);
             return null;
         }
 
-        return jsFile;
+        return resourceStream;
     }
+
+    public static void initializePluginFiles(File pluginFolder) {
+        File jsFile = new File(pluginFolder, "TikTokWebSocketConnector.js");
+
+        if (!jsFile.exists()) {
+            try (InputStream in = WebSocketIntegration.class.getClassLoader().getResourceAsStream("TikTokWebSocketConnector.js");
+                 OutputStream out = new FileOutputStream(jsFile)) {
+
+                if (in != null) {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = in.read(buffer)) > 0) {
+                        out.write(buffer, 0, length);
+                    }
+                    Common.log("TikTokWebSocketConnector.js copied to plugin folder.");
+                } else {
+                    Common.log("Could not find TikTokWebSocketConnector.js in JAR resources.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     static class TikTokLiveEvent implements HttpHandler {
         @Override
@@ -87,7 +112,7 @@ public class WebSocketIntegration {
             if ("POST".equals(exchange.getRequestMethod())) {
                 // Read incoming event from JavaScript WebSocket
                 String event = new String(exchange.getRequestBody().readAllBytes());
-                System.out.println("Received event from JavaScript: " + event);
+                Common.log("Received event from JavaScript: " + event);
 
                 // Process the event (e.g., broadcast to Minecraft players)
                 // TODO: Add your logic here for handling the event

@@ -5,6 +5,8 @@ Started August 2024
 Commands: F3 + p, AltTab
 Chat Msg: Mc Username
 
+Had to install Node.js
+
 Maybe Stream on Youtube, Watch live on phone?
 
 *Every5Mins may need to remove unactive PlayerCaches.

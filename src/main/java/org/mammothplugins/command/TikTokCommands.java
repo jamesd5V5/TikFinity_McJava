@@ -121,7 +121,7 @@ public class TikTokCommands extends SimpleCommand {
                 Common.broadcast("&7Cleared All PlayerCaches.");
                 foundCommand = true;
             } else if ("connect".equalsIgnoreCase(this.args[0])) {
-                WebSocketIntegration.connectToTikTok();
+                WebSocketIntegration.connectToTikTok(TikTokLive.getInstance().getDataFolder());
                 foundCommand = true;
             }
         }
