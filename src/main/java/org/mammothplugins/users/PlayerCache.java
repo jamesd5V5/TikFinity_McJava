@@ -21,6 +21,7 @@ public final class PlayerCache extends YamlConfig {
 
     private static volatile Map<String, PlayerCache> cacheMap = new HashMap<>();
     private static int overallLikes;
+    private static int unsavedCaches;
 
     private final String username;
     private String playerName;
@@ -52,11 +53,15 @@ public final class PlayerCache extends YamlConfig {
 
     @Override
     public void onSave() {
-        this.set("Level", this.level);
-        this.set("PlayerName", this.playerName);
-        this.set("Follows", this.isFollowing);
-        this.set("TotalLikes", this.totalLikes);
-        //this.set("TotalGifts", this.totalGifts);
+        if (totalLikes > 0) {
+            this.set("Level", this.level);
+            this.set("PlayerName", this.playerName);
+            this.set("Follows", this.isFollowing);
+            this.set("TotalLikes", this.totalLikes);
+            //this.set("TotalGifts", this.totalGifts);
+        } else {
+            unsavedCaches++;
+        }
     }
 
     @Override
@@ -168,18 +173,25 @@ public final class PlayerCache extends YamlConfig {
 
     public static PlayerCache from(String username) {
         synchronized (cacheMap) {
-            final String playerName = username;
+            String sanitizedUsername = sanitizeUsername(username);
 
-            PlayerCache cache = cacheMap.get(username);
+            PlayerCache cache = cacheMap.get(sanitizedUsername);
 
             if (cache == null) {
-                cache = new PlayerCache(playerName);
+                cache = new PlayerCache(sanitizedUsername);
 
-                cacheMap.put(playerName, cache);
+                cacheMap.put(sanitizedUsername, cache);
             }
 
             return cache;
         }
+    }
+
+    public static String sanitizeUsername(String username) {
+        if (username == null)
+            return username;
+        else
+            return username.replaceAll("§.", "");
     }
 
     public static Set<String> getUsernames() {
@@ -188,6 +200,10 @@ public final class PlayerCache extends YamlConfig {
 
     public static int getOverallLikes() {
         return overallLikes;
+    }
+
+    public static int getUnsavedCaches() {
+        return unsavedCaches;
     }
 
     public static void clearCaches() {

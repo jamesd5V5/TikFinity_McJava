@@ -20,6 +20,9 @@ public class TimeCore {
         Location loc = locations.getPlayerLocation();
         player.teleport(loc);
 
+        for (Entity entity : player.getNearbyEntities(50, 50, 50))
+            entity.remove();
+        
         heartBeat = new HeartBeat(player);
         heartBeat.runTaskTimer(TikTokLive.getInstance(), 0l, 10l);
         ZombieTimer.runEvery30Secs();
@@ -30,6 +33,7 @@ public class TimeCore {
         Common.log("&c======McJava has stopped======");
         Common.log("&7- Overall Likes: " + PlayerCache.getOverallLikes());
         Common.log("&7- Zombie count: " + EventZombie.getAliveZombies());
+        Common.log("&7- Passing By Users: " + PlayerCache.getUnsavedCaches());
 
         for (Entity entity : player.getNearbyEntities(50, 50, 50))
             entity.remove();
